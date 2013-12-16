@@ -23,81 +23,13 @@
 # Purpose :
 
 import xml.etree.ElementTree as xet
-import sys, argparse
+import sys, argparse, urllib
 from BeautifulSoup import BeautifulSoup as bs
 
 def __main__ ():
 
-
-#    print ("Please select an operation you would like to perform:")
-#    print ("\n")
-#    print ("\t [1] Perform operations based on IAVA")
-#    print ("\t [2] Perform operations based on CVE")
-#    print ("\n")
-#    op = raw_input("Enter your selection: ")
-#    if op == 1:
-#        _iava_menu()
-#    elif op == 2:
-#        _cve_menu()
-#    else:
-#        "You did not select a valid entry. Please try again."
-#        __main__()
-
     _iava_parse()
-            
-def _iava_menu():
-    
-    print ("Please select an operation you would like to perform:")
-    print ("\n")
-    print ("\t [1] Parse IAVA database based on date or date range")
-    print ("\t [2] Search IAVA database based on IAVA number")
-    print ("\n")
-    op = raw_input("Enter your selection: ")
-    
-    if op == 1:
-        _iava_date_menu()
-    elif op == 2:
-        _iava_num_search()
-    else:
-        "You did not select a valid entry. Please try again."
-        _iava_menu()
-        
-def _cve_menu():
-    ''' For CVE operations '''
-    print ("this is a test.")
-    sys.exit(0)
-    
-def _iava_date_menu():
-    '''for searching iava database based on date'''
-    
-    print ("Please select an operation you would like to perform:")
-    print ("\n")
-    print ("\t [1] Parse by date range")
-    print ("\t [2] Parse by specific date")
-    print ("\n")
-    op = raw_input("Enter your selection: ")
-    
-    if op == 1:
-        _iava_daterange_search()
-    elif op == 2:
-        _iava_date_search()
-    else:
-        "You did not select a valid entry. Please try again."
-        _iava_date_menu()
-
-def _iava_daterange_search():
-    ''' For CVE operations '''
-    print ("this is a test.")
-    sys.exit(0)
-        
-def _iava_date_search():
-    ''' For CVE operations '''
-    print ("this is a test.")
-    sys.exit(0)
-            
-def _iava_num_search():
-    '''for searching iava database based on iava number'''
-    
+                
 def _iava_parse():
     url = "http://iase.disa.mil/stigs/downloads/xml/iavm-to-cve(u).xml"
     doc = xet.parse("test.xml")
@@ -113,56 +45,57 @@ def _iava_parse():
         iavaCVENumbers = [ ]
         for iavaCVEList in iavaEntry[2].findall('CVENumber'):
             iavaCVENumbers.append(iavaCVEList.text)
-        iavaRefName = []
-        iavaRefURL = []
+            iavaRefName = []
+            iavaRefURL = []
         for iavaRefList in iavaEntry[3].findall('Reference'):
             iavaRefName.append(iavaRefList.attrib.get("RefName"))
             iavaRefURL.append(iavaRefList.attrib.get("URL"))
-    _iava_console_out(iavaNumber, iavaTitle, iavaRelease, iavaSeverity, iavaRevisionDate, iavaRevisionNum, iavaCVENumbers, iavaRefName, iavaRefURL)
+        iavaOut = iavaNumber + '.doc'
+        with open(iavaOut, 'wb+') as f:
+            f.writelines("IAVA:\t\t\t" + iavaNumber + "\n")
+            f.writelines("Title:\t\t" + iavaTitle + "\n")
+            f.writelines("Release Date:\t" + iavaRelease + "\n")
+            f.writelines("Rev Date:\t\t" + iavaRevisionDate + "\n")
+            f.writelines("Rev Number:\t\t" + iavaRevisionNum + "\n")
+            f.writelines("Severity:\t\t" + iavaSeverity + "\n")
+            f.writelines("CVE List:\n\n")
+            i = 0
+            while i < len(iavaCVENumbers):
+                cve = iavaCVENumbers[i]
+                _cve_html_parse(iavaCVENumbers, cve, f)
+                f.writelines("\n")
+                i += 1
+            i = 0
+            while i < len(iavaRefName):
+                f.writelines("Reference %s: " % i + iavaRefName[i] + " - " + "\t %s" % iavaRefURL[i] + "\n")
+                i += 1
 
-def _iava_console_out(iavaNumber, iavaTitle, iavaRelease, iavaSeverity, iavaRevisionDate, iavaRevisionNum, iavaCVENumbers, iavaRefName, iavaRefURL):
-    print ("IAVA:\t\t" + iavaNumber)
-    print ("Title:\t\t" + iavaTitle)
-    print ("Release Date:\t" + iavaRelease)
-    print ("Rev Date:\t" + iavaRevisionDate)
-    print ("Rev Number:\t" + iavaRevisionNum)
-    print ("Severity:\t" + iavaSeverity)
-    print ("CVE List:\t")
-    i = 0
-    while i < len(iavaCVENumbers):
-        cve = iavaCVENumbers[i]
-        _cve_html_parse(iavaCVENumbers, cve)
-        print ("\n")
-        i += 1
-    i = 0
-    while i < len(iavaRefName):
-        print ("Reference %s: " % i + iavaRefName[i] + " - " + "\t %s" % iavaRefURL[i])
-        i += 1
-
-def _cve_html_parse(iavaCVENumbers, cve):
+def _cve_html_parse(iavaCVENumbers, cve, f):
     
     cveURL = "https://access.redhat.com/security/cve/%s" % cve
-    cveFile = open("CVE-2013-5844.html")
-    doc = cveFile.read()
-    data = bs(''.join(doc))
+    cveFile = urllib.urlopen(cveURL)
+    # cveFile = open("CVE-2013-5844.html")
+    # doc = cveFile.read()
+    data = bs(''.join(cveFile))
     
-    _parse_cve_table(data.findAll("table")[0], cveURL)
-    _parse_cvss_table(data.findAll("table")[1])
-    _parse_rhsa_table(data.findAll("table")[2])
+    _parse_cve_table(data.findAll("table")[0], cveURL, cve, f)
+    _parse_cvss_table(data.findAll("table")[1], f)
+    _parse_rhsa_table(data.findAll("table")[2], f)
     
-def _parse_cve_table(table, cveURL):
+def _parse_cve_table(table, cveURL, cve, f):
     '''This function is to parse the cve table from Red Hat CVE database (https://access.redhat.com/security/cve/)'''
     cveImpact = _parse_cve_impact(table.findAll('tr')[0])
     cvePubDate = _parse_cve_pubdate(table.findAll('tr')[1])
     cveBZInfo = _parse_cve_bugzilla(table.findAll('tr')[2])
     cveIAVARef = _parse_cve_iavaref(table.findAll('tr')[3])
-    print ("\tCVE URL: %s" % cveURL)
-    print ("\t\tImpact: \t\t\t%s" % cveImpact)
-    print ("\t\tDate Public: \t\t\t%s" % cvePubDate)
-    print ("\t\tBugzilla#: \t\t\t%s" % cveBZInfo[0])
-    print ("\t\tBugzilla URL: \t\t\t%s" % cveBZInfo[1])
-    print ("\t\tIAVA Number: \t\t\t%s" % cveIAVARef)
-    print ("\n")
+    f.writelines(cve + "\n")
+    f.writelines("\tURL:\t\t\t\t%s" % cveURL + "\n")
+    f.writelines("\tImpact:\t\t\t%s" % cveImpact + "\n")
+    f.writelines("\tDate Public:\t\t%s" % cvePubDate + "\n")
+    f.writelines("\tBugzilla#:\t\t\t%s" % cveBZInfo[0] + "\n")
+    f.writelines("\tBugzilla URL:\t\t%s" % cveBZInfo[1] + "\n")
+    f.writelines("\tIAVA Number:\t\t%s" % cveIAVARef + "\n")
+    f.writelines("\n")
     
 def _parse_cve_impact(impact): 
     cveImpact = impact.findNext('td').text
@@ -185,7 +118,7 @@ def _parse_cve_iavaref(iavaref):
     cveIAVARef = iavaref.findNext('td').text
     return cveIAVARef
     
-def _parse_cvss_table(table):
+def _parse_cvss_table(table, f):
     '''This function is to parse the cvss table from Red Hat CVE database (https://access.redhat.com/security/cve/)'''
     cvssBaseScore = _parse_cvss_base_score(table.findAll('tr')[0])
     cvssBaseMetrics = _parse_cvss_base_metrics(table.findAll('tr')[1])
@@ -195,16 +128,16 @@ def _parse_cvss_table(table):
     cvssConfidentialityImpact = _parse_cvss_confidentiality_impact(table.findAll('tr')[5])
     cvssIntegrityImpact = _parse_cvss_integrity_impact(table.findAll('tr')[6])
     cvssAvailabilityImpact = _parse_cvss_availability_impact(table.findAll('tr')[7])
-    print ("\tCVSS Information From Red Hat CVE Database")
-    print ("\t\tBase Score: \t\t\t%s" % cvssBaseScore)
-    print ("\t\tBase Metrics: \t\t\t%s" % cvssBaseMetrics)
-    print ("\t\tAccess Vector: \t\t\t%s" % cvssAccessVector)
-    print ("\t\tAccess Complexity: \t\t%s" % cvssAccessComplexity)
-    print ("\t\tAuthentication: \t\t%s" % cvssAuthentication)
-    print ("\t\tConfidentiality Impact: \t%s" % cvssConfidentialityImpact)    
-    print ("\t\tIntegrity Impact: \t\t%s" % cvssIntegrityImpact)
-    print ("\t\tAvailability Impact: \t\t%s" % cvssAvailabilityImpact)
-    print ("\n")
+    f.writelines("CVSS Information From Red Hat CVE Database" + "\n")
+    f.writelines("\tBase Score:\t\t\t\t%s" % cvssBaseScore + "\n")
+    f.writelines("\tBase Metrics:\t\t\t%s" % cvssBaseMetrics + "\n")
+    f.writelines("\tAccess Vector:\t\t\t%s" % cvssAccessVector + "\n")
+    f.writelines("\tAccess Complexity:\t\t%s" % cvssAccessComplexity + "\n")
+    f.writelines("\tAuthentication:\t\t\t%s" % cvssAuthentication + "\n")
+    f.writelines("\tConfidentiality Impact:\t\t%s" % cvssConfidentialityImpact + "\n")    
+    f.writelines("\tIntegrity Impact:\t\t\t%s" % cvssIntegrityImpact + "\n")
+    f.writelines("\tAvailability Impact:\t\t%s" % cvssAvailabilityImpact + "\n")
+    f.writelines("\n")
     
 def _parse_cvss_base_score(bs):
     cvssBaseScore = bs.findNext('td').text
@@ -238,7 +171,7 @@ def _parse_cvss_availability_impact(ai):
     cvssAvailabilityImpact = ai.findNext('td').text
     return cvssAvailabilityImpact
         
-def _parse_rhsa_table(table):
+def _parse_rhsa_table(table, f):
     '''This function is to parse the rhsa table from Red Hat CVE database (https://access.redhat.com/security/cve/)'''
     
 
@@ -256,16 +189,17 @@ def _parse_rhsa_table(table):
         rhsaRelease.append(_parse_rhsa_release(entries[i]))        
         i += 1
     count = 0
-    print ("\tRHSAs Release Information")
-    while len(rhsaPlatform) > count: 
-        print ("\t\tRHSA Number: \t\t%s" % rhsaNum[count])
-        print ("\t\tRHSA URL: \t\t%s" % rhsaURL[count])
-        print ("\t\tPlatform Affected: \t%s" % rhsaPlatform[count])
-        print ("\t\tRelease Date: \t\t%s" % rhsaRelease[count])
-        print ("\n")
-        count += 1
-    sys.exit(0)
-
+    f.writelines("RHSAs Release Information" + "\n")
+    if len(rhsaNum) == 0:
+        f.writelines("No RHSA information available for this CVE")
+    else:
+        while len(rhsaPlatform) > count: 
+            f.writelines("RHSA Number:\t\t%s" % rhsaNum[count] + "\n")
+            f.writelines("\tRHSA URL:\t\t\t%s" % rhsaURL[count] + "\n")
+            f.writelines("\tPlatform Affected:\t%s" % rhsaPlatform[count] + "\n")
+            f.writelines("\tRelease Date:\t\t%s" % rhsaRelease[count] + "\n")
+            f.writelines("\n")
+            count += 1
 
 def _parse_rhsa_platform(rhsa):
     
