@@ -1,0 +1,113 @@
+<IAVMtoCVE>
+<IAVM>
+<S VMSKey="V0042303" Severity="Category I" ReleaseDate="14 Nov 2013" IAVM="2013-B-0131" Title="Multiple Vulnerabilities in Samba"/>
+<Revision Number="0.0" Date="14 Nov 2013"/>
+<CVEs>
+<CVENumber>CVE-2013-4475</CVENumber>
+<CVENumber>CVE-2013-4476</CVENumber>
+</CVEs>
+<References>
+<Reference RefName="Samba Release Announcement" URL="http://www.samba.org/samba/security/CVE-2013-4476"/>
+<Reference RefName="Samba Release Announcement" URL="http://www.samba.org/samba/security/CVE-2013-4475"/>
+</References>
+</IAVM>
+<IAVM>
+<S VMSKey="V0042308" Severity="Category I" ReleaseDate="14 Nov 2013" IAVM="2013-B-0130" Title="MIT Kerberos Denial of Service Vulnerabilities"/>
+<Revision Number="0.0" Date="14 Nov 2013"/>
+<CVEs>
+<CVENumber>CVE-2013-1418</CVENumber>
+</CVEs>
+<References>
+<Reference RefName="Kerberos 5 Release 1.10.7" URL="http://web.mit.edu/kerberos/www/krb5-1.10/"/>
+<Reference RefName="Kerberos 5 Release 1.11.4" URL="http://web.mit.edu/kerberos/www/krb5-1.11/"/>
+</References>
+</IAVM>
+<IAVM>
+<S VMSKey="V0042380" Severity="Category I" ReleaseDate="21 Nov 2013" IAVM="2013-A-0220" Title="Multiple Vulnerabilities in Mozilla Products"/>
+<Revision Number="0.0" Date="21 Nov 2013"/>
+<CVEs>
+<CVENumber>CVE-2013-1741</CVENumber>
+<CVENumber>CVE-2013-2566</CVENumber>
+<CVENumber>CVE-2013-5605</CVENumber>
+<CVENumber>CVE-2013-5606</CVENumber>
+<CVENumber>CVE-2013-5607</CVENumber>
+</CVEs>
+<References>
+<Reference RefName="Mozilla Foundation Security Advisory 2013-103" URL="http://www.mozilla.org/security/announce/2013/mfsa2013-103.html"/>
+</References>
+</IAVM>
+<IAVM>
+<S VMSKey="V0037605" Severity="Category I" ReleaseDate="11 Apr 2013" IAVM="2013-A-0077" Title="Multiple Vulnerabilities in OpenSSL"/>
+<Revision Number="0.0" Date="11 Apr 2013"/>
+<CVEs>
+<CVENumber>CVE-2013-0169</CVENumber>
+<CVENumber>CVE-2013-0166</CVENumber>
+<CVENumber>CVE-2012-2686</CVENumber>
+</CVEs>
+<References>
+<Reference RefName="OpenSSL Release Announcement" URL="http://www.openssl.org/news/announce.html"/>
+<Reference RefName="OpenSSL Security Advisory 20130205" URL="http://www.openssl.org/news/secadv_20130205.txt"/>
+</References>
+</IAVM>
+<IAVM>
+<S VMSKey="V0040783" Severity="Category I" ReleaseDate="17 Oct 2013" IAVM="2013-A-0200" Title="Multiple Vulnerabilities in Oracle Java"/>
+<Revision Number="0.0" Date="17 Oct 2013"/>
+<CVEs>
+<CVENumber>CVE-2013-4002</CVENumber>
+<CVENumber>CVE-2013-3829</CVENumber>
+<CVENumber>CVE-2013-5772</CVENumber>
+<CVENumber>CVE-2013-5774</CVENumber>
+<CVENumber>CVE-2013-5776</CVENumber>
+<CVENumber>CVE-2013-5778</CVENumber>
+<CVENumber>CVE-2013-5780</CVENumber>
+<CVENumber>CVE-2013-5782</CVENumber>
+<CVENumber>CVE-2013-5783</CVENumber>
+<CVENumber>CVE-2013-5784</CVENumber>
+<CVENumber>CVE-2013-5787</CVENumber>
+<CVENumber>CVE-2013-5789</CVENumber>
+<CVENumber>CVE-2013-5790</CVENumber>
+<CVENumber>CVE-2013-5797</CVENumber>
+<CVENumber>CVE-2013-5801</CVENumber>
+<CVENumber>CVE-2013-5802</CVENumber>
+<CVENumber>CVE-2013-5803</CVENumber>
+<CVENumber>CVE-2013-5804</CVENumber>
+<CVENumber>CVE-2013-5809</CVENumber>
+<CVENumber>CVE-2013-5812</CVENumber>
+<CVENumber>CVE-2013-5814</CVENumber>
+<CVENumber>CVE-2013-5817</CVENumber>
+<CVENumber>CVE-2013-5818</CVENumber>
+<CVENumber>CVE-2013-5819</CVENumber>
+<CVENumber>CVE-2013-5820</CVENumber>
+<CVENumber>CVE-2013-5823</CVENumber>
+<CVENumber>CVE-2013-5824</CVENumber>
+<CVENumber>CVE-2013-5825</CVENumber>
+<CVENumber>CVE-2013-5829</CVENumber>
+<CVENumber>CVE-2013-5830</CVENumber>
+<CVENumber>CVE-2013-5831</CVENumber>
+<CVENumber>CVE-2013-5832</CVENumber>
+<CVENumber>CVE-2013-5840</CVENumber>
+<CVENumber>CVE-2013-5842</CVENumber>
+<CVENumber>CVE-2013-5843</CVENumber>
+<CVENumber>CVE-2013-5848</CVENumber>
+<CVENumber>CVE-2013-5849</CVENumber>
+<CVENumber>CVE-2013-5850</CVENumber>
+<CVENumber>CVE-2013-5775</CVENumber>
+<CVENumber>CVE-2013-5777</CVENumber>
+<CVENumber>CVE-2013-5788</CVENumber>
+<CVENumber>CVE-2013-5800</CVENumber>
+<CVENumber>CVE-2013-5805</CVENumber>
+<CVENumber>CVE-2013-5806</CVENumber>
+<CVENumber>CVE-2013-5810</CVENumber>
+<CVENumber>CVE-2013-5838</CVENumber>
+<CVENumber>CVE-2013-5844</CVENumber>
+<CVENumber>CVE-2013-5846</CVENumber>
+<CVENumber>CVE-2013-5851</CVENumber>
+<CVENumber>CVE-2013-5852</CVENumber>
+<CVENumber>CVE-2013-5854</CVENumber>
+</CVEs>
+<References>
+<Reference RefName="Oracle Critical Patch Update Advisory - October 2013" URL="http://www.oracle.com/technetwork/topics/security/cpuoct2013-1899837.html"/>
+<Reference RefName="Oracle Java SE Risk Matrix" URL="http://www.oracle.com/technetwork/topics/security/cpuoct2013-1899837.html#AppendixJAVA"/>
+</References>
+</IAVM>
+</IAVMtoCVE>
